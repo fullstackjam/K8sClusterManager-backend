@@ -10,7 +10,7 @@
     "server": "uvicorn main:app --reload"
   },
   "portsAttributes": {
-    "5000": {
+    "8000": {
       "label": "Application",
       "onAutoForward": "openPreview"
     }

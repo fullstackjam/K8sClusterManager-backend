@@ -2,9 +2,12 @@ import os
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 import requests
 
+
 app = FastAPI()
+
 
 # Add CORS middleware
 app.add_middleware(
@@ -15,6 +18,10 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
+@app.get("/")
+def read_root():
+    response = RedirectResponse(url='/docs')
+    return response
 
 API_ENDPOINT = "https://api.vultr.com/v2/"
 API_KEY = os.getenv("VULTR_API_KEY")
