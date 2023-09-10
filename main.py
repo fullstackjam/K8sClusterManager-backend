@@ -18,29 +18,33 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
+
 @app.get("/")
 def read_root():
-    response = RedirectResponse(url='/docs')
+    response = RedirectResponse(url="/docs")
     return response
+
 
 API_ENDPOINT = "https://api.vultr.com/v2/"
 API_KEY = os.getenv("VULTR_API_KEY")
-HEADERS = {
-    "Authorization": f"Bearer {API_KEY}",
-    "Content-Type": "application/json"
-}
+HEADERS = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
 
 
 def format_response(data, error=None):
     return {"data": data, "error": error}
 
+
 @app.delete("/delete_cluster/{vke_id}")
 async def delete_cluster(vke_id: str):
-    response = requests.delete(f"{API_ENDPOINT}kubernetes/clusters/{vke_id}/delete-with-linked-resources", headers=HEADERS)
+    response = requests.delete(
+        f"{API_ENDPOINT}kubernetes/clusters/{vke_id}/delete-with-linked-resources",
+        headers=HEADERS,
+    )
     if response.status_code == 204:
         return {"message": "Cluster and all related resources deleted successfully"}
     else:
         raise HTTPException(status_code=response.status_code, detail=response.text)
+
 
 @app.get("/list_clusters/")
 async def list_clusters():
@@ -66,12 +70,15 @@ async def create_cluster():
                 "label": "my-label",
                 "auto_scaler": True,
                 "min_nodes": 1,
-                "max_nodes": 5
+                "max_nodes": 5,
             }
-        ]
+        ],
     }
     response = requests.post(endpoint, headers=HEADERS, json=payload)
     if response.status_code == 201:
-        return {"message": "Successfully created Kubernetes cluster", "data": response.json()}
+        return {
+            "message": "Successfully created Kubernetes cluster",
+            "data": response.json(),
+        }
     else:
         raise HTTPException(status_code=response.status_code, detail=response.text)
