@@ -62,7 +62,7 @@ async def create_cluster():
     payload = {
         "region": "lax",
         "label": "my-label",
-        "version": "v1.27.2+1",
+        "version": "v1.27.7+2",
         "node_pools": [
             {
                 "node_quantity": 1,
